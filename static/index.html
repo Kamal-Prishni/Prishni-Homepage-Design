@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prishni — Accessible Learning for Everyone</title>
+  <meta name="description" content="Prishni is an inclusive EdTech platform providing accessible courses and skill development for persons with disabilities, caregivers, and organizations." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: { sans: ['Inter', 'ui-sans-serif', 'system-ui'] },
+          colors: {
+            border: 'hsl(var(--border))',
+            background: 'hsl(var(--background))',
+            foreground: 'hsl(var(--foreground))',
+            card: { DEFAULT: 'hsl(var(--card))', foreground: 'hsl(var(--card-foreground))' },
+            primary: { DEFAULT: 'hsl(var(--primary))', foreground: 'hsl(var(--primary-foreground))' },
+            secondary: { DEFAULT: 'hsl(var(--secondary))', foreground: 'hsl(var(--secondary-foreground))' },
+            muted: { DEFAULT: 'hsl(var(--muted))', foreground: 'hsl(var(--muted-foreground))' },
+            accent: { DEFAULT: 'hsl(var(--accent))', foreground: 'hsl(var(--accent-foreground))' },
+            destructive: { DEFAULT: 'hsl(var(--destructive))', foreground: 'hsl(var(--destructive-foreground))' },
+          },
+          animation: { float: 'float 6s ease-in-out infinite', 'fade-up': 'fadeUp 0.6s ease-out both' },
+          keyframes: {
+            float: { '0%,100%': { transform: 'translateY(0)' }, '50%': { transform: 'translateY(-20px)' } },
+            fadeUp: { '0%': { opacity: '0', transform: 'translateY(20px)' }, '100%': { opacity: '1', transform: 'translateY(0)' } },
+          },
+        },
+      },
+    };
+  </script>
+
+  <style>
+    :root {
+      --background: 210 40% 98%;
+      --foreground: 222 47% 11%;
+      --card: 0 0% 100%;
+      --card-foreground: 222 47% 11%;
+      --primary: 217 91% 60%;
+      --primary-foreground: 0 0% 100%;
+      --secondary: 160 84% 39%;
+      --secondary-foreground: 0 0% 100%;
+      --muted: 210 40% 96%;
+      --muted-foreground: 215 16% 47%;
+      --accent: 258 90% 66%;
+      --accent-foreground: 0 0% 100%;
+      --destructive: 0 84% 60%;
+      --destructive-foreground: 0 0% 100%;
+      --border: 214 32% 91%;
+      --ring: 217 91% 60%;
+      --gradient-hero: linear-gradient(135deg, hsl(217 91% 60% / 0.06) 0%, hsl(258 90% 66% / 0.08) 50%, hsl(160 84% 39% / 0.04) 100%);
+      --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(258 90% 66%));
+      --gradient-cta: linear-gradient(135deg, hsl(217 91% 60%), hsl(258 90% 66% / 0.9));
+      --gradient-card-hover: linear-gradient(135deg, hsl(217 91% 60% / 0.02), hsl(258 90% 66% / 0.04));
+      --shadow-card: 0 1px 3px hsl(217 91% 60% / 0.06), 0 1px 2px hsl(217 91% 60% / 0.04);
+      --shadow-card-hover: 0 20px 40px hsl(217 91% 60% / 0.12), 0 8px 16px hsl(217 91% 60% / 0.06);
+      --shadow-button: 0 4px 14px hsl(217 91% 60% / 0.3);
+    }
+    body { font-family: 'Inter', system-ui, sans-serif; letter-spacing: -0.01em; background: hsl(var(--background)); color: hsl(var(--foreground)); }
+    h1,h2,h3,h4,h5,h6 { letter-spacing: -0.02em; text-wrap: balance; }
+    *:focus-visible { outline: 3px solid hsl(var(--accent)); outline-offset: 4px; border-radius: 4px; }
+
+    .section-padding { padding: 6rem 1rem; }
+    @media (min-width: 640px) { .section-padding { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { .section-padding { padding: 8rem 2rem; } }
+    .container-content { max-width: 80rem; margin-left: auto; margin-right: auto; }
+
+    .modern-card { background: hsl(var(--card)); border-radius: 1rem; padding: 2rem; border: 1px solid hsl(var(--border) / 0.6); box-shadow: var(--shadow-card); transition: all .3s; }
+    .modern-card:hover { box-shadow: var(--shadow-card-hover); transform: translateY(-4px); background: var(--gradient-card-hover); border-color: hsl(var(--primary) / 0.2); }
+
+    .pill-tag { display: inline-flex; align-items: center; padding: .25rem .75rem; border-radius: 9999px; font-size: .75rem; font-weight: 600; letter-spacing: .03em; }
+    .pill-green { background: hsl(var(--secondary) / 0.1); color: hsl(var(--secondary)); }
+    .pill-blue { background: hsl(var(--primary) / 0.1); color: hsl(var(--primary)); font-variant-numeric: tabular-nums; }
+
+    .gradient-text { background: var(--gradient-primary); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; color: transparent; }
+    .hero-gradient { background: var(--gradient-hero); }
+    .cta-gradient { background: var(--gradient-cta); }
+
+    .section-label { font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .15em; display: inline-block; padding: .25rem .75rem; border-radius: 9999px; background: hsl(var(--primary) / 0.08); color: hsl(var(--primary)); margin-bottom: 1rem; }
+
+    .icon-box { width: 3rem; height: 3rem; border-radius: .75rem; display: flex; align-items: center; justify-content: center; }
+    .icon-box-primary { background: hsl(var(--primary) / 0.1); color: hsl(var(--primary)); }
+    .icon-box-secondary { background: hsl(var(--secondary) / 0.1); color: hsl(var(--secondary)); }
+    .icon-box-accent { background: hsl(var(--accent) / 0.1); color: hsl(var(--accent)); }
+
+    .btn { display: inline-flex; align-items: center; justify-content: center; gap: .5rem; white-space: nowrap; border-radius: .75rem; font-weight: 600; transition: all .2s; cursor: pointer; border: none; font-size: .875rem; }
+    .btn-lg { height: 3.25rem; padding: 0 2rem; font-size: 1rem; min-height: 48px; }
+    .btn-md { height: 2.75rem; padding: .5rem 1.25rem; min-height: 44px; }
+    .btn-gradient { background: var(--gradient-primary); color: hsl(var(--primary-foreground)); box-shadow: var(--shadow-button); }
+    .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 20px hsl(var(--primary) / 0.35); }
+    .btn-outline { border: 2px solid hsl(var(--primary) / 0.2); background: transparent; color: hsl(var(--foreground)); }
+    .btn-outline:hover { border-color: hsl(var(--primary)); background: hsl(var(--primary) / 0.05); transform: translateY(-2px); }
+    .btn-light { background: hsl(var(--card)); color: hsl(var(--foreground)); box-shadow: 0 10px 25px rgba(0,0,0,.15); }
+    .btn-light:hover { background: hsl(var(--card) / 0.9); transform: translateY(-2px); }
+    .btn-ghost-light { border: 2px solid hsl(var(--primary-foreground) / 0.3); color: hsl(var(--primary-foreground)); background: transparent; }
+    .btn-ghost-light:hover { background: hsl(var(--primary-foreground) / 0.1); transform: translateY(-2px); }
+
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    [data-icon] { width: 1rem; height: 1rem; }
+  </style>
+</head>
+<body>
+  <!-- Navbar -->
+  <nav class="sticky top-0 z-50 backdrop-blur-xl border-b" style="background: hsl(var(--card) / 0.8); border-color: hsl(var(--border) / 0.5);" aria-label="Main navigation">
+    <div class="container-content flex items-center justify-between h-16 px-4 sm:px-6 lg:px-8">
+      <a href="#" class="text-2xl font-extrabold tracking-tight"><span class="gradient-text">Prishni</span></a>
+      <div class="hidden md:flex items-center gap-8">
+        <a href="#" class="text-muted-foreground hover:text-foreground font-medium text-[0.9rem] transition-colors">Home</a>
+        <a href="#courses" class="text-muted-foreground hover:text-foreground font-medium text-[0.9rem] transition-colors">Courses</a>
+        <a href="#about" class="text-muted-foreground hover:text-foreground font-medium text-[0.9rem] transition-colors">About</a>
+        <a href="#footer" class="text-muted-foreground hover:text-foreground font-medium text-[0.9rem] transition-colors">Contact</a>
+        <button class="btn btn-md btn-gradient px-6">Sign Up</button>
+      </div>
+      <button id="menuBtn" class="md:hidden p-2 text-foreground" aria-label="Open menu" aria-expanded="false">
+        <i data-lucide="menu"></i>
+      </button>
+    </div>
+    <div id="mobileMenu" class="md:hidden hidden border-t px-4 pb-4" style="border-color: hsl(var(--border) / 0.5); background: hsl(var(--card) / 0.95);">
+      <a href="#" class="block py-3 text-muted-foreground hover:text-foreground font-medium">Home</a>
+      <a href="#courses" class="block py-3 text-muted-foreground hover:text-foreground font-medium">Courses</a>
+      <a href="#about" class="block py-3 text-muted-foreground hover:text-foreground font-medium">About</a>
+      <a href="#footer" class="block py-3 text-muted-foreground hover:text-foreground font-medium">Contact</a>
+      <button class="btn btn-md btn-gradient w-full mt-2">Sign Up</button>
+    </div>
+  </nav>
+
+  <main>
+    <!-- Hero -->
+    <section class="section-padding hero-gradient relative overflow-hidden" aria-labelledby="hero-heading">
+      <div class="absolute top-20 left-10 w-72 h-72 rounded-full opacity-20 blur-3xl animate-float" style="background: hsl(var(--primary) / 0.3);"></div>
+      <div class="absolute bottom-10 right-20 w-96 h-96 rounded-full opacity-15 blur-3xl animate-float" style="background: hsl(var(--accent) / 0.25); animation-delay: 2s;"></div>
+      <div class="container-content relative">
+        <div class="grid lg:grid-cols-5 gap-12 lg:gap-20 items-center">
+          <div class="lg:col-span-3 space-y-8 reveal">
+            <span class="section-label"><i data-lucide="sparkles" class="inline" style="width:12px;height:12px;"></i> Inclusive EdTech Platform</span>
+            <h1 id="hero-heading" class="font-black leading-[1.05] tracking-tight" style="font-size: clamp(2.5rem, 5vw, 4.25rem);">
+              Accessible Learning <span class="gradient-text">for Everyone</span>
+            </h1>
+            <p class="text-muted-foreground text-lg lg:text-xl max-w-lg leading-relaxed">A platform designed to provide inclusive education and skill development for learners of all abilities.</p>
+            <div class="flex flex-wrap gap-4 pt-2">
+              <button class="btn btn-lg btn-gradient">Explore Courses <i data-lucide="arrow-right"></i></button>
+              <button class="btn btn-lg btn-outline">Join as Expert</button>
+            </div>
+            <div class="flex items-center gap-6 pt-4">
+              <div class="flex -space-x-2">
+                <div class="w-8 h-8 rounded-full border-2" style="background: hsl(217 60% 50%); border-color: hsl(var(--card));"></div>
+                <div class="w-8 h-8 rounded-full border-2" style="background: hsl(247 70% 55%); border-color: hsl(var(--card));"></div>
+                <div class="w-8 h-8 rounded-full border-2" style="background: hsl(277 80% 60%); border-color: hsl(var(--card));"></div>
+                <div class="w-8 h-8 rounded-full border-2" style="background: hsl(307 90% 65%); border-color: hsl(var(--card));"></div>
+              </div>
+              <p class="text-sm text-muted-foreground"><span class="font-bold text-foreground">2,000+</span> learners already enrolled</p>
+            </div>
+          </div>
+          <div class="lg:col-span-2 reveal">
+            <div class="relative">
+              <div class="absolute -inset-4 rounded-3xl opacity-20 blur-2xl" style="background: var(--gradient-primary);"></div>
+              <div class="w-full aspect-square rounded-2xl relative flex items-center justify-center" style="background: var(--gradient-primary);">
+                <i data-lucide="graduation-cap" style="width:120px;height:120px;color:white;"></i>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Problem / Solution -->
+    <section class="section-padding" id="about" style="background: hsl(var(--card));" aria-labelledby="ps-heading">
+      <div class="container-content max-w-4xl mx-auto text-center">
+        <div class="space-y-10 reveal">
+          <span class="section-label">Why Prishni?</span>
+          <h2 id="ps-heading" class="text-3xl lg:text-[2.75rem] font-extrabold leading-tight">Education Should Be Accessible <span class="gradient-text">to Everyone</span></h2>
+          <div class="grid sm:grid-cols-2 gap-6 text-left pt-4">
+            <div class="modern-card space-y-4">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: hsl(var(--destructive) / 0.1);"><span class="text-lg">⚠️</span></div>
+              <h3 class="text-lg font-bold">The Problem</h3>
+              <p class="text-muted-foreground leading-relaxed">Many learners with disabilities lack access to proper learning resources and inclusive educational content, creating barriers to growth.</p>
+            </div>
+            <div class="rounded-2xl p-8 space-y-4 cta-gradient text-white" style="box-shadow: var(--shadow-button);">
+              <div class="w-10 h-10 rounded-lg flex items-center justify-center" style="background: rgba(255,255,255,.2);"><i data-lucide="arrow-right"></i></div>
+              <h3 class="text-lg font-bold">The Solution</h3>
+              <p class="leading-relaxed text-white/90">Prishni provides accessible courses and inclusive learning experiences, bridging the gap between quality education and learners who need it most.</p>
+            </div>
+          </div>
+          <p class="text-lg text-muted-foreground font-medium italic pt-2">"Education isn't broken; the access is. We built the bridge."</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features -->
+    <section class="section-padding" aria-labelledby="features-heading">
+      <div class="container-content">
+        <div class="text-center mb-16 reveal">
+          <span class="section-label">Features</span>
+          <h2 id="features-heading" class="text-3xl lg:text-[2.75rem] font-extrabold mt-2">Everything You Need to <span class="gradient-text">Learn & Grow</span></h2>
+          <p class="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">A comprehensive platform built for inclusive, effective learning experiences.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="featuresGrid"></div>
+      </div>
+    </section>
+
+    <!-- Who Can Use -->
+    <section class="section-padding" style="background: hsl(var(--card));" aria-labelledby="who-heading">
+      <div class="container-content">
+        <div class="text-center mb-16 reveal">
+          <span class="section-label">For Everyone</span>
+          <h2 id="who-heading" class="text-3xl lg:text-[2.75rem] font-extrabold mt-2">Who Can Use <span class="gradient-text">Prishni</span></h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6" id="whoGrid"></div>
+      </div>
+    </section>
+
+    <!-- Courses -->
+    <section class="section-padding" id="courses" aria-labelledby="courses-heading">
+      <div class="container-content">
+        <div class="text-center mb-16 reveal">
+          <span class="section-label">Courses</span>
+          <h2 id="courses-heading" class="text-3xl lg:text-[2.75rem] font-extrabold mt-2">Featured <span class="gradient-text">Courses</span></h2>
+          <p class="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto">Start building skills with our expert-designed, accessible courses.</p>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6" id="coursesGrid"></div>
+      </div>
+    </section>
+
+    <!-- Accessibility -->
+    <section class="section-padding" style="background: hsl(var(--card));" aria-labelledby="a11y-heading">
+      <div class="container-content">
+        <div class="text-center mb-16 reveal">
+          <span class="section-label">Accessibility</span>
+          <h2 id="a11y-heading" class="text-3xl lg:text-[2.75rem] font-extrabold mt-2">Accessibility at <span class="gradient-text">Our Core</span></h2>
+          <p class="mt-4 text-muted-foreground text-lg max-w-2xl mx-auto"><span class="font-bold text-foreground">98.4%</span> WCAG Compliance Score across all course modules.</p>
+        </div>
+        <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-6" id="a11yGrid"></div>
+      </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="section-padding" aria-labelledby="testimonials-heading">
+      <div class="container-content">
+        <div class="text-center mb-16 reveal">
+          <span class="section-label">Testimonials</span>
+          <h2 id="testimonials-heading" class="text-3xl lg:text-[2.75rem] font-extrabold mt-2">What Our <span class="gradient-text">Learners Say</span></h2>
+        </div>
+        <div class="grid md:grid-cols-3 gap-6" id="testimonialsGrid"></div>
+      </div>
+    </section>
+
+    <!-- Trusted By -->
+    <section class="py-20" style="background: hsl(var(--card));" aria-labelledby="trusted-heading">
+      <div class="container-content text-center px-4 sm:px-6 lg:px-8 reveal">
+        <span class="section-label">Partners</span>
+        <h2 id="trusted-heading" class="text-xl font-bold mt-2 mb-12">Trusted by Leading Organizations</h2>
+        <div class="flex flex-wrap items-center justify-center gap-8">
+          <div class="px-8 py-4 rounded-2xl border bg-background font-bold text-base opacity-50 hover:opacity-100 transition-all duration-300" style="border-color: hsl(var(--border) / 0.6);">Microsoft for Startups</div>
+          <div class="px-8 py-4 rounded-2xl border bg-background font-bold text-base opacity-50 hover:opacity-100 transition-all duration-300" style="border-color: hsl(var(--border) / 0.6);">Enable India</div>
+          <div class="px-8 py-4 rounded-2xl border bg-background font-bold text-base opacity-50 hover:opacity-100 transition-all duration-300" style="border-color: hsl(var(--border) / 0.6);">NSRCEL IIM Bangalore</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA -->
+    <section class="section-padding relative overflow-hidden" aria-labelledby="cta-heading">
+      <div class="absolute inset-0 cta-gradient"></div>
+      <div class="absolute top-10 left-10 w-80 h-80 rounded-full blur-3xl" style="background: rgba(255,255,255,.05);"></div>
+      <div class="absolute bottom-10 right-10 w-96 h-96 rounded-full blur-3xl" style="background: rgba(255,255,255,.05);"></div>
+      <div class="container-content text-center relative">
+        <div class="space-y-8 max-w-2xl mx-auto reveal">
+          <h2 id="cta-heading" class="text-3xl lg:text-[2.75rem] font-extrabold text-white leading-tight">Start Your Inclusive Learning Journey Today</h2>
+          <p class="text-white/80 text-lg">Join thousands of learners building skills through accessible, inclusive education.</p>
+          <div class="flex flex-wrap justify-center gap-4 pt-4">
+            <button class="btn btn-lg btn-light font-bold">Sign Up <i data-lucide="arrow-right"></i></button>
+            <button class="btn btn-lg btn-ghost-light font-bold">Explore Courses</button>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Footer -->
+  <footer id="footer" class="py-20 px-4 sm:px-6 lg:px-8" style="background: hsl(var(--foreground));">
+    <div class="container-content">
+      <div class="grid md:grid-cols-4 gap-12">
+        <div class="space-y-5">
+          <span class="text-2xl font-extrabold" style="color: hsl(var(--card));">Prishni</span>
+          <p class="leading-relaxed text-sm" style="color: hsl(var(--card) / 0.5);">Inclusive education and skill development for learners of all abilities.</p>
+          <div class="flex gap-3">
+            <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors" style="background: hsl(var(--card) / 0.1); color: hsl(var(--card) / 0.6);" aria-label="Twitter"><i data-lucide="twitter"></i></a>
+            <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors" style="background: hsl(var(--card) / 0.1); color: hsl(var(--card) / 0.6);" aria-label="LinkedIn"><i data-lucide="linkedin"></i></a>
+            <a href="#" class="w-9 h-9 rounded-lg flex items-center justify-center transition-colors" style="background: hsl(var(--card) / 0.1); color: hsl(var(--card) / 0.6);" aria-label="GitHub"><i data-lucide="github"></i></a>
+          </div>
+        </div>
+        <div>
+          <h3 class="font-bold mb-5 text-xs uppercase tracking-[0.15em]" style="color: hsl(var(--card) / 0.4);">Quick Links</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">Home</a></li>
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">About Us</a></li>
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">Courses</a></li>
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">Careers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold mb-5 text-xs uppercase tracking-[0.15em]" style="color: hsl(var(--card) / 0.4);">Legal</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">Privacy Policy</a></li>
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">Terms of Service</a></li>
+            <li><a href="#" style="color: hsl(var(--card) / 0.5);">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="font-bold mb-5 text-xs uppercase tracking-[0.15em]" style="color: hsl(var(--card) / 0.4);">Contact Us</h3>
+          <ul class="space-y-3 text-sm">
+            <li><a href="mailto:hello@prishni.com" class="flex items-center gap-2" style="color: hsl(var(--card) / 0.5);"><i data-lucide="mail" style="width:14px;height:14px;"></i> hello@prishni.com</a></li>
+            <li><a href="tel:+911234567890" class="flex items-center gap-2" style="color: hsl(var(--card) / 0.5);"><i data-lucide="phone" style="width:14px;height:14px;"></i> +91 123 456 7890</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t mt-16 pt-8 text-center text-sm" style="border-color: hsl(var(--card) / 0.1); color: hsl(var(--card) / 0.3);">
+        © <span id="year"></span> Prishni. All rights reserved.
+      </div>
+    </div>
+  </footer>
+
+  <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+  <script>
+    // Data
+    const features = [
+      { icon: 'eye', title: 'Accessible Learning', desc: 'Courses designed with accessibility in mind, ensuring every learner can engage fully.', color: 'primary' },
+      { icon: 'award', title: 'Expert-Designed Content', desc: 'Courses and materials created by experienced educators and specialists.', color: 'secondary' },
+      { icon: 'clock', title: 'Flexible Learning', desc: 'Learn anytime and anywhere with self-paced courses that fit your schedule.', color: 'accent' },
+      { icon: 'book-open', title: 'Educational Resources', desc: 'Access books, tools, and learning materials that support inclusive education.', color: 'primary' },
+    ];
+    const personas = [
+      { icon: 'graduation-cap', title: 'Learners', desc: 'Gain skills and knowledge through accessible and inclusive courses designed for diverse needs.', color: 'primary' },
+      { icon: 'lightbulb', title: 'Experts', desc: 'Create and publish courses to share your knowledge with a wider, more diverse audience.', color: 'secondary' },
+      { icon: 'building-2', title: 'Organizations', desc: 'Deliver accessible learning programs and training to your teams and communities.', color: 'accent' },
+    ];
+    const courses = [
+      { title: 'Web Accessibility Development', desc: 'Learn to build websites and applications accessible to all users, following WCAG guidelines.', diff: 'Intermediate', dur: '8 weeks' },
+      { title: 'Digital Skills for All', desc: 'Essential digital literacy skills designed for learners of diverse abilities.', diff: 'Beginner', dur: '6 weeks' },
+      { title: 'Assistive Technology Fundamentals', desc: 'Master the tools and technologies that enable independent learning and work.', diff: 'Beginner', dur: '4 weeks' },
+    ];
+    const a11y = [
+      { icon: 'monitor', title: 'Screen Reader Friendly', desc: 'Full compatibility with popular screen readers for seamless navigation.', color: 'primary' },
+      { icon: 'keyboard', title: 'Keyboard Navigation', desc: 'Complete keyboard support with visible focus indicators throughout.', color: 'secondary' },
+      { icon: 'accessibility', title: 'Accessible Content', desc: 'All course content meets WCAG AA standards with captions and alt text.', color: 'accent' },
+      { icon: 'heart', title: 'Inclusive Design', desc: 'Built from the ground up with diverse learners and their needs in mind.', color: 'primary' },
+    ];
+    const testimonials = [
+      { quote: "Prishni's courses gave me the confidence and skills to pursue a career in web development. The accessible format made all the difference.", name: 'Ananya R.', role: 'Learner, Visual Impairment' },
+      { quote: "As an educator, I love how easy it is to create inclusive content on Prishni. The platform truly puts accessibility first.", name: 'Dr. Sanjay M.', role: 'Expert & Educator' },
+      { quote: "We've used Prishni to train our entire team on digital accessibility. The results have been outstanding.", name: 'Priya K.', role: 'HR Lead, Tech Company' },
+    ];
+
+    const iconBox = (color) => `icon-box icon-box-${color}`;
+
+    document.getElementById('featuresGrid').innerHTML = features.map(f => `
+      <div class="modern-card flex flex-col items-start gap-5 reveal">
+        <div class="${iconBox(f.color)}"><i data-lucide="${f.icon}"></i></div>
+        <h3 class="text-lg font-bold">${f.title}</h3>
+        <p class="text-muted-foreground leading-relaxed text-[0.95rem]">${f.desc}</p>
+      </div>`).join('');
+
+    document.getElementById('whoGrid').innerHTML = personas.map(p => `
+      <div class="modern-card text-center space-y-5 reveal">
+        <div class="w-16 h-16 rounded-2xl flex items-center justify-center mx-auto" style="background: hsl(var(--${p.color}) / 0.1); color: hsl(var(--${p.color}));"><i data-lucide="${p.icon}" style="width:32px;height:32px;"></i></div>
+        <h3 class="text-xl font-bold">${p.title}</h3>
+        <p class="text-muted-foreground leading-relaxed">${p.desc}</p>
+      </div>`).join('');
+
+    document.getElementById('coursesGrid').innerHTML = courses.map(c => `
+      <article class="modern-card flex flex-col reveal">
+        <div class="flex items-center gap-2 mb-5">
+          <span class="pill-tag pill-green">${c.diff}</span>
+          <span class="pill-tag pill-blue">${c.dur}</span>
+        </div>
+        <h3 class="text-xl font-bold mb-3">${c.title}</h3>
+        <p class="text-muted-foreground leading-relaxed mb-8 flex-1 text-[0.95rem]">${c.desc}</p>
+        <button class="btn btn-md btn-outline w-full gap-2">View Course <i data-lucide="arrow-right"></i></button>
+      </article>`).join('');
+
+    document.getElementById('a11yGrid').innerHTML = a11y.map(item => `
+      <div class="modern-card text-center space-y-5 reveal">
+        <div class="${iconBox(item.color)} mx-auto w-14 h-14 rounded-2xl"><i data-lucide="${item.icon}" style="width:28px;height:28px;"></i></div>
+        <h3 class="text-lg font-bold">${item.title}</h3>
+        <p class="text-muted-foreground leading-relaxed text-[0.95rem]">${item.desc}</p>
+      </div>`).join('');
+
+    document.getElementById('testimonialsGrid').innerHTML = testimonials.map(t => `
+      <blockquote class="modern-card flex flex-col reveal">
+        <div class="flex gap-1 mb-4" style="color: hsl(var(--accent));">
+          ${'<i data-lucide="star" style="fill:currentColor;width:16px;height:16px;"></i>'.repeat(5)}
+        </div>
+        <p class="leading-relaxed flex-1 text-[0.95rem]">"${t.quote}"</p>
+        <footer class="mt-6 pt-5 border-t" style="border-color: hsl(var(--border) / 0.6);">
+          <cite class="not-italic flex items-center gap-3">
+            <div class="w-10 h-10 rounded-full flex items-center justify-center font-bold text-sm text-white" style="background: var(--gradient-primary);">${t.name.charAt(0)}</div>
+            <div>
+              <span class="font-bold block text-sm">${t.name}</span>
+              <span class="text-xs text-muted-foreground">${t.role}</span>
+            </div>
+          </cite>
+        </footer>
+      </blockquote>`).join('');
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // Init icons
+    lucide.createIcons();
+
+    // Mobile menu toggle
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('hidden') === false;
+      menuBtn.setAttribute('aria-expanded', open);
+      menuBtn.innerHTML = open ? '<i data-lucide="x"></i>' : '<i data-lucide="menu"></i>';
+      lucide.createIcons();
+    });
+
+    // Reveal on scroll
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
