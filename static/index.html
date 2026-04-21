@@ -1,0 +1,666 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Prishni — Accessible Learning for Everyone</title>
+  <meta name="description" content="Prishni is an inclusive EdTech platform providing accessible courses and skill development for persons with disabilities, caregivers, and organizations." />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+  <style>
+    /* ============ Design tokens ============ */
+    :root {
+      --background: 210 40% 98%;
+      --foreground: 222 47% 11%;
+      --card: 0 0% 100%;
+      --primary: 217 91% 60%;
+      --primary-foreground: 0 0% 100%;
+      --secondary: 160 84% 39%;
+      --muted-foreground: 215 16% 47%;
+      --accent: 258 90% 66%;
+      --destructive: 0 84% 60%;
+      --border: 214 32% 91%;
+      --foreground-dark: 222 47% 11%;
+
+      --gradient-hero: linear-gradient(135deg, hsl(217 91% 60% / 0.06) 0%, hsl(258 90% 66% / 0.08) 50%, hsl(160 84% 39% / 0.04) 100%);
+      --gradient-primary: linear-gradient(135deg, hsl(217 91% 60%), hsl(258 90% 66%));
+      --gradient-cta: linear-gradient(135deg, hsl(217 91% 60%), hsl(258 90% 66% / 0.9));
+      --gradient-card-hover: linear-gradient(135deg, hsl(217 91% 60% / 0.02), hsl(258 90% 66% / 0.04));
+
+      --shadow-card: 0 1px 3px hsl(217 91% 60% / 0.06), 0 1px 2px hsl(217 91% 60% / 0.04);
+      --shadow-card-hover: 0 20px 40px hsl(217 91% 60% / 0.12), 0 8px 16px hsl(217 91% 60% / 0.06);
+      --shadow-button: 0 4px 14px hsl(217 91% 60% / 0.3);
+    }
+
+    /* ============ Reset & base ============ */
+    *, *::before, *::after { box-sizing: border-box; }
+    * { margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
+      letter-spacing: -0.01em;
+      background: hsl(var(--background));
+      color: hsl(var(--foreground));
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+    }
+    img, svg { display: block; max-width: 100%; }
+    a { color: inherit; text-decoration: none; }
+    button { font: inherit; cursor: pointer; border: none; background: none; color: inherit; }
+    ul { list-style: none; }
+    h1, h2, h3, h4 { letter-spacing: -0.02em; line-height: 1.15; font-weight: 800; }
+    *:focus-visible { outline: 3px solid hsl(var(--accent)); outline-offset: 4px; border-radius: 4px; }
+
+    /* ============ Layout ============ */
+    .container { max-width: 1280px; margin: 0 auto; padding: 0 1rem; }
+    @media (min-width: 640px) { .container { padding: 0 1.5rem; } }
+    @media (min-width: 1024px) { .container { padding: 0 2rem; } }
+
+    section { padding: 6rem 1rem; }
+    @media (min-width: 640px) { section { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { section { padding: 8rem 2rem; } }
+
+    .bg-card-section { background: hsl(var(--card)); }
+
+    /* ============ Typography helpers ============ */
+    .muted { color: hsl(var(--muted-foreground)); }
+    .gradient-text {
+      background: var(--gradient-primary);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent; color: transparent;
+    }
+    .section-label {
+      display: inline-block;
+      font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.15em;
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      background: hsl(var(--primary) / 0.08); color: hsl(var(--primary));
+      margin-bottom: 1rem;
+    }
+    .section-head { text-align: center; margin-bottom: 4rem; }
+    .section-head h2 { font-size: 1.875rem; font-weight: 800; }
+    @media (min-width: 1024px) { .section-head h2 { font-size: 2.75rem; } }
+    .section-head p { margin-top: 1rem; font-size: 1.125rem; max-width: 42rem; margin-left: auto; margin-right: auto; color: hsl(var(--muted-foreground)); }
+
+    /* ============ Buttons ============ */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 0.5rem;
+      white-space: nowrap; border-radius: 0.75rem; font-weight: 600;
+      transition: transform .2s, box-shadow .2s, background .2s, border-color .2s;
+      font-size: 0.875rem;
+    }
+    .btn-md { height: 2.75rem; padding: 0 1.25rem; min-height: 44px; }
+    .btn-lg { height: 3.25rem; padding: 0 2rem; font-size: 1rem; min-height: 48px; }
+    .btn-block { width: 100%; }
+    .btn-gradient { background: var(--gradient-primary); color: hsl(var(--primary-foreground)); box-shadow: var(--shadow-button); }
+    .btn-gradient:hover { transform: translateY(-2px); box-shadow: 0 10px 22px hsl(var(--primary) / 0.35); }
+    .btn-outline { border: 2px solid hsl(var(--primary) / 0.2); background: transparent; color: hsl(var(--foreground)); }
+    .btn-outline:hover { border-color: hsl(var(--primary)); background: hsl(var(--primary) / 0.05); transform: translateY(-2px); }
+    .btn-light { background: hsl(var(--card)); color: hsl(var(--foreground)); box-shadow: 0 10px 25px rgba(0,0,0,.15); font-weight: 700; }
+    .btn-light:hover { transform: translateY(-2px); }
+    .btn-ghost-light { border: 2px solid hsl(var(--primary-foreground) / 0.3); color: hsl(var(--primary-foreground)); background: transparent; font-weight: 700; }
+    .btn-ghost-light:hover { background: hsl(var(--primary-foreground) / 0.1); transform: translateY(-2px); }
+
+    /* ============ Card ============ */
+    .card {
+      background: hsl(var(--card));
+      border-radius: 1rem;
+      padding: 2rem;
+      border: 1px solid hsl(var(--border) / 0.6);
+      box-shadow: var(--shadow-card);
+      transition: all .3s ease;
+      display: flex; flex-direction: column;
+    }
+    .card:hover {
+      box-shadow: var(--shadow-card-hover);
+      transform: translateY(-4px);
+      background: var(--gradient-card-hover);
+      border-color: hsl(var(--primary) / 0.2);
+    }
+    .card-center { text-align: center; align-items: center; }
+
+    /* ============ Pills ============ */
+    .pill {
+      display: inline-flex; align-items: center;
+      padding: 0.25rem 0.75rem; border-radius: 9999px;
+      font-size: 0.75rem; font-weight: 600; letter-spacing: 0.03em;
+    }
+    .pill-green { background: hsl(var(--secondary) / 0.1); color: hsl(var(--secondary)); }
+    .pill-blue { background: hsl(var(--primary) / 0.1); color: hsl(var(--primary)); font-variant-numeric: tabular-nums; }
+
+    /* ============ Icon boxes ============ */
+    .icon-box {
+      width: 3rem; height: 3rem; border-radius: 0.75rem;
+      display: inline-flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .icon-box svg { width: 1.5rem; height: 1.5rem; }
+    .icon-box-primary { background: hsl(var(--primary) / 0.1); color: hsl(var(--primary)); }
+    .icon-box-secondary { background: hsl(var(--secondary) / 0.1); color: hsl(var(--secondary)); }
+    .icon-box-accent { background: hsl(var(--accent) / 0.1); color: hsl(var(--accent)); }
+    .icon-box-lg { width: 4rem; height: 4rem; border-radius: 1rem; }
+    .icon-box-lg svg { width: 2rem; height: 2rem; }
+    .icon-box-md { width: 3.5rem; height: 3.5rem; border-radius: 1rem; }
+    .icon-box-md svg { width: 1.75rem; height: 1.75rem; }
+
+    /* ============ Navbar ============ */
+    .nav {
+      position: sticky; top: 0; z-index: 50;
+      background: hsl(var(--card) / 0.8);
+      backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+      border-bottom: 1px solid hsl(var(--border) / 0.5);
+    }
+    .nav-inner { display: flex; align-items: center; justify-content: space-between; height: 4rem; }
+    .logo { font-size: 1.5rem; font-weight: 800; letter-spacing: -0.02em; }
+    .nav-links { display: none; align-items: center; gap: 2rem; }
+    .nav-links a { color: hsl(var(--muted-foreground)); font-weight: 500; font-size: 0.9rem; transition: color .2s; }
+    .nav-links a:hover { color: hsl(var(--foreground)); }
+    .menu-btn { display: inline-flex; padding: 0.5rem; }
+    .menu-btn svg { width: 1.5rem; height: 1.5rem; }
+    .mobile-menu { display: none; border-top: 1px solid hsl(var(--border) / 0.5); background: hsl(var(--card) / 0.95); padding: 0 1rem 1rem; }
+    .mobile-menu.open { display: block; }
+    .mobile-menu a { display: block; padding: 0.75rem 0; color: hsl(var(--muted-foreground)); font-weight: 500; }
+    .mobile-menu .btn { margin-top: 0.5rem; }
+    @media (min-width: 768px) {
+      .nav-links { display: flex; }
+      .menu-btn { display: none; }
+      .mobile-menu { display: none !important; }
+    }
+
+    /* ============ Hero ============ */
+    .hero { background: var(--gradient-hero); position: relative; overflow: hidden; }
+    .hero-orb { position: absolute; border-radius: 9999px; filter: blur(60px); pointer-events: none; }
+    .hero-orb-1 { top: 5rem; left: 2.5rem; width: 18rem; height: 18rem; background: hsl(var(--primary) / 0.3); opacity: 0.2; animation: float 6s ease-in-out infinite; }
+    .hero-orb-2 { bottom: 2.5rem; right: 5rem; width: 24rem; height: 24rem; background: hsl(var(--accent) / 0.25); opacity: 0.15; animation: float 6s ease-in-out infinite; animation-delay: 2s; }
+    @keyframes float { 0%,100% { transform: translateY(0); } 50% { transform: translateY(-20px); } }
+
+    .hero-grid { display: grid; gap: 3rem; align-items: center; position: relative; }
+    @media (min-width: 1024px) { .hero-grid { grid-template-columns: 3fr 2fr; gap: 5rem; } }
+    .hero h1 { font-size: clamp(2.5rem, 5vw, 4.25rem); font-weight: 900; line-height: 1.05; }
+    .hero p.lead { font-size: 1.125rem; max-width: 32rem; color: hsl(var(--muted-foreground)); margin-top: 1.5rem; }
+    @media (min-width: 1024px) { .hero p.lead { font-size: 1.25rem; } }
+    .hero-cta { display: flex; flex-wrap: wrap; gap: 1rem; margin-top: 2rem; }
+    .hero-social { display: flex; align-items: center; gap: 1.5rem; margin-top: 2rem; }
+    .avatars { display: flex; }
+    .avatars > div { width: 2rem; height: 2rem; border-radius: 9999px; border: 2px solid hsl(var(--card)); margin-left: -0.5rem; }
+    .avatars > div:first-child { margin-left: 0; }
+    .hero-stack > * + * { margin-top: 2rem; }
+    .hero-art { position: relative; }
+    .hero-art-inner {
+      aspect-ratio: 1; border-radius: 1rem;
+      background: var(--gradient-primary);
+      display: flex; align-items: center; justify-content: center;
+      position: relative;
+    }
+    .hero-art-inner svg { width: 120px; height: 120px; color: white; }
+    .hero-art-glow { position: absolute; inset: -1rem; border-radius: 1.5rem; background: var(--gradient-primary); opacity: 0.2; filter: blur(40px); }
+
+    /* ============ Grids ============ */
+    .grid-2 { display: grid; gap: 1.5rem; }
+    .grid-3 { display: grid; gap: 1.5rem; }
+    .grid-4 { display: grid; gap: 1.5rem; }
+    @media (min-width: 640px) { .grid-2 { grid-template-columns: repeat(2, 1fr); } .grid-4 { grid-template-columns: repeat(2, 1fr); } }
+    @media (min-width: 768px) { .grid-3 { grid-template-columns: repeat(3, 1fr); } }
+    @media (min-width: 1024px) { .grid-4 { grid-template-columns: repeat(4, 1fr); } }
+
+    /* ============ Problem/Solution ============ */
+    .ps { max-width: 56rem; margin: 0 auto; text-align: center; }
+    .ps h2 { font-size: 1.875rem; }
+    @media (min-width: 1024px) { .ps h2 { font-size: 2.75rem; } }
+    .ps-grid { text-align: left; margin-top: 2.5rem; }
+    .ps-icon { width: 2.5rem; height: 2.5rem; border-radius: 0.5rem; display: flex; align-items: center; justify-content: center; }
+    .ps-icon-warn { background: hsl(var(--destructive) / 0.1); }
+    .ps-icon-solution { background: rgba(255,255,255,0.2); color: white; }
+    .ps-card-solution {
+      border-radius: 1rem; padding: 2rem;
+      background: var(--gradient-cta); color: white;
+      box-shadow: var(--shadow-button);
+      display: flex; flex-direction: column; gap: 1rem;
+    }
+    .ps-card-solution p { color: rgba(255,255,255,0.9); }
+    .quote-italic { font-style: italic; font-weight: 500; font-size: 1.125rem; color: hsl(var(--muted-foreground)); margin-top: 2.5rem; }
+
+    /* ============ Features list ============ */
+    .feature-card h3, .who-card h3, .a11y-card h3, .course-card h3 { font-weight: 700; }
+    .feature-card { gap: 1.25rem; align-items: flex-start; }
+    .feature-card h3 { font-size: 1.125rem; }
+    .feature-card p { color: hsl(var(--muted-foreground)); font-size: 0.95rem; }
+
+    .who-card { gap: 1.25rem; text-align: center; align-items: center; }
+    .who-card h3 { font-size: 1.25rem; }
+    .who-card p { color: hsl(var(--muted-foreground)); }
+
+    .a11y-card { gap: 1.25rem; text-align: center; align-items: center; }
+    .a11y-card h3 { font-size: 1.125rem; }
+    .a11y-card p { color: hsl(var(--muted-foreground)); font-size: 0.95rem; }
+
+    .course-card .pills { display: flex; gap: 0.5rem; margin-bottom: 1.25rem; }
+    .course-card h3 { font-size: 1.25rem; margin-bottom: 0.75rem; }
+    .course-card p { color: hsl(var(--muted-foreground)); font-size: 0.95rem; flex: 1; margin-bottom: 2rem; }
+
+    /* ============ Testimonials ============ */
+    .t-card .stars { display: flex; gap: 0.25rem; margin-bottom: 1rem; color: hsl(var(--accent)); }
+    .t-card .stars svg { width: 1rem; height: 1rem; fill: currentColor; }
+    .t-card p.q { flex: 1; font-size: 0.95rem; }
+    .t-card footer { margin-top: 1.5rem; padding-top: 1.25rem; border-top: 1px solid hsl(var(--border) / 0.6); }
+    .t-card cite { font-style: normal; display: flex; align-items: center; gap: 0.75rem; }
+    .t-avatar {
+      width: 2.5rem; height: 2.5rem; border-radius: 9999px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--gradient-primary); color: white; font-weight: 700; font-size: 0.875rem;
+    }
+    .t-name { font-weight: 700; font-size: 0.875rem; display: block; }
+    .t-role { font-size: 0.75rem; color: hsl(var(--muted-foreground)); }
+
+    /* ============ Trusted ============ */
+    .trusted { padding: 5rem 1rem; }
+    .trusted .container { text-align: center; }
+    .trusted h2 { font-size: 1.25rem; margin: 0.5rem 0 3rem; }
+    .partners { display: flex; flex-wrap: wrap; justify-content: center; align-items: center; gap: 2rem; }
+    .partner {
+      padding: 1rem 2rem; border-radius: 1rem;
+      border: 1px solid hsl(var(--border) / 0.6);
+      background: hsl(var(--background));
+      font-weight: 700; opacity: 0.5;
+      transition: opacity .3s, box-shadow .3s, border-color .3s;
+    }
+    .partner:hover { opacity: 1; box-shadow: var(--shadow-card-hover); border-color: hsl(var(--primary) / 0.2); }
+
+    /* ============ CTA ============ */
+    .cta { position: relative; overflow: hidden; }
+    .cta-bg { position: absolute; inset: 0; background: var(--gradient-cta); }
+    .cta-orb { position: absolute; border-radius: 9999px; background: rgba(255,255,255,0.05); filter: blur(60px); }
+    .cta-orb-1 { top: 2.5rem; left: 2.5rem; width: 20rem; height: 20rem; }
+    .cta-orb-2 { bottom: 2.5rem; right: 2.5rem; width: 24rem; height: 24rem; }
+    .cta-content { position: relative; max-width: 42rem; margin: 0 auto; text-align: center; color: white; }
+    .cta-content h2 { font-size: 1.875rem; line-height: 1.15; }
+    @media (min-width: 1024px) { .cta-content h2 { font-size: 2.75rem; } }
+    .cta-content p { color: rgba(255,255,255,0.8); font-size: 1.125rem; margin-top: 1.5rem; }
+    .cta-content .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 1rem; margin-top: 2rem; }
+
+    /* ============ Footer ============ */
+    footer.site {
+      background: hsl(var(--foreground-dark));
+      padding: 5rem 1rem;
+      color: hsl(var(--card) / 0.5);
+    }
+    @media (min-width: 640px) { footer.site { padding-left: 1.5rem; padding-right: 1.5rem; } }
+    @media (min-width: 1024px) { footer.site { padding-left: 2rem; padding-right: 2rem; } }
+    .footer-grid { display: grid; gap: 3rem; }
+    @media (min-width: 768px) { .footer-grid { grid-template-columns: repeat(4, 1fr); } }
+    .footer-brand { display: flex; flex-direction: column; gap: 1.25rem; }
+    .footer-brand .logo { color: hsl(var(--card)); }
+    .footer-brand p { font-size: 0.875rem; }
+    .socials { display: flex; gap: 0.75rem; }
+    .socials a {
+      width: 2.25rem; height: 2.25rem; border-radius: 0.5rem;
+      background: hsl(var(--card) / 0.1); color: hsl(var(--card) / 0.6);
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s, color .2s;
+    }
+    .socials a:hover { background: hsl(var(--card) / 0.2); color: hsl(var(--card)); }
+    .socials svg { width: 1rem; height: 1rem; }
+    footer.site h3 {
+      font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em;
+      color: hsl(var(--card) / 0.4); margin-bottom: 1.25rem; font-weight: 700;
+    }
+    footer.site ul li + li { margin-top: 0.75rem; }
+    footer.site ul a { font-size: 0.875rem; transition: color .2s; }
+    footer.site ul a:hover { color: hsl(var(--card)); }
+    .contact-link { display: inline-flex; align-items: center; gap: 0.5rem; }
+    .contact-link svg { width: 14px; height: 14px; }
+    .copyright {
+      border-top: 1px solid hsl(var(--card) / 0.1);
+      margin-top: 4rem; padding-top: 2rem; text-align: center;
+      font-size: 0.875rem; color: hsl(var(--card) / 0.3);
+    }
+
+    /* ============ Reveal animation ============ */
+    .reveal { opacity: 0; transform: translateY(20px); transition: opacity .6s ease, transform .6s ease; }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+      .hero-orb-1, .hero-orb-2 { animation: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============ Navbar ============ -->
+  <nav class="nav" aria-label="Main navigation">
+    <div class="container nav-inner">
+      <a href="#" class="logo"><span class="gradient-text">Prishni</span></a>
+      <div class="nav-links">
+        <a href="#">Home</a>
+        <a href="#courses">Courses</a>
+        <a href="#about">About</a>
+        <a href="#footer">Contact</a>
+        <button class="btn btn-md btn-gradient" style="padding: 0 1.5rem;">Sign Up</button>
+      </div>
+      <button id="menuBtn" class="menu-btn" aria-label="Open menu" aria-expanded="false">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+    </div>
+    <div id="mobileMenu" class="mobile-menu">
+      <a href="#">Home</a>
+      <a href="#courses">Courses</a>
+      <a href="#about">About</a>
+      <a href="#footer">Contact</a>
+      <button class="btn btn-md btn-gradient btn-block">Sign Up</button>
+    </div>
+  </nav>
+
+  <main>
+
+    <!-- ============ Hero ============ -->
+    <section class="hero" aria-labelledby="hero-heading">
+      <div class="hero-orb hero-orb-1"></div>
+      <div class="hero-orb hero-orb-2"></div>
+      <div class="container hero-grid">
+        <div class="hero-stack reveal">
+          <span class="section-label">✨ Inclusive EdTech Platform</span>
+          <h1 id="hero-heading">Accessible Learning <span class="gradient-text">for Everyone</span></h1>
+          <p class="lead">A platform designed to provide inclusive education and skill development for learners of all abilities.</p>
+          <div class="hero-cta">
+            <button class="btn btn-lg btn-gradient">Explore Courses
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </button>
+            <button class="btn btn-lg btn-outline">Join as Expert</button>
+          </div>
+          <div class="hero-social">
+            <div class="avatars">
+              <div style="background: hsl(217 60% 50%);"></div>
+              <div style="background: hsl(247 70% 55%);"></div>
+              <div style="background: hsl(277 80% 60%);"></div>
+              <div style="background: hsl(307 90% 65%);"></div>
+            </div>
+            <p style="font-size: 0.875rem;" class="muted"><strong style="color: hsl(var(--foreground));">2,000+</strong> learners already enrolled</p>
+          </div>
+        </div>
+        <div class="hero-art reveal">
+          <div class="hero-art-glow"></div>
+          <div class="hero-art-inner">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ Problem / Solution ============ -->
+    <section class="bg-card-section" id="about" aria-labelledby="ps-heading">
+      <div class="container ps reveal">
+        <span class="section-label">Why Prishni?</span>
+        <h2 id="ps-heading" style="margin-top: 0.5rem;">Education Should Be Accessible <span class="gradient-text">to Everyone</span></h2>
+        <div class="grid-2 ps-grid">
+          <div class="card" style="gap: 1rem; align-items: flex-start;">
+            <div class="ps-icon ps-icon-warn"><span style="font-size: 1.125rem;">⚠️</span></div>
+            <h3 style="font-size: 1.125rem; font-weight: 700;">The Problem</h3>
+            <p class="muted">Many learners with disabilities lack access to proper learning resources and inclusive educational content, creating barriers to growth.</p>
+          </div>
+          <div class="ps-card-solution">
+            <div class="ps-icon ps-icon-solution">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="20" height="20"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </div>
+            <h3 style="font-size: 1.125rem; font-weight: 700;">The Solution</h3>
+            <p>Prishni provides accessible courses and inclusive learning experiences, bridging the gap between quality education and learners who need it most.</p>
+          </div>
+        </div>
+        <p class="quote-italic">"Education isn't broken; the access is. We built the bridge."</p>
+      </div>
+    </section>
+
+    <!-- ============ Features ============ -->
+    <section aria-labelledby="features-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">Features</span>
+          <h2 id="features-heading">Everything You Need to <span class="gradient-text">Learn & Grow</span></h2>
+          <p>A comprehensive platform built for inclusive, effective learning experiences.</p>
+        </div>
+        <div class="grid-4" id="featuresGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ Who Can Use ============ -->
+    <section class="bg-card-section" aria-labelledby="who-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">For Everyone</span>
+          <h2 id="who-heading">Who Can Use <span class="gradient-text">Prishni</span></h2>
+        </div>
+        <div class="grid-3" id="whoGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ Courses ============ -->
+    <section id="courses" aria-labelledby="courses-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">Courses</span>
+          <h2 id="courses-heading">Featured <span class="gradient-text">Courses</span></h2>
+          <p>Start building skills with our expert-designed, accessible courses.</p>
+        </div>
+        <div class="grid-3" id="coursesGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ Accessibility ============ -->
+    <section class="bg-card-section" aria-labelledby="a11y-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">Accessibility</span>
+          <h2 id="a11y-heading">Accessibility at <span class="gradient-text">Our Core</span></h2>
+          <p><strong style="color: hsl(var(--foreground));">98.4%</strong> WCAG Compliance Score across all course modules.</p>
+        </div>
+        <div class="grid-4" id="a11yGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ Testimonials ============ -->
+    <section aria-labelledby="testimonials-heading">
+      <div class="container">
+        <div class="section-head reveal">
+          <span class="section-label">Testimonials</span>
+          <h2 id="testimonials-heading">What Our <span class="gradient-text">Learners Say</span></h2>
+        </div>
+        <div class="grid-3" id="testimonialsGrid"></div>
+      </div>
+    </section>
+
+    <!-- ============ Trusted By ============ -->
+    <section class="bg-card-section trusted" aria-labelledby="trusted-heading">
+      <div class="container reveal">
+        <span class="section-label">Partners</span>
+        <h2 id="trusted-heading">Trusted by Leading Organizations</h2>
+        <div class="partners">
+          <div class="partner">Microsoft for Startups</div>
+          <div class="partner">Enable India</div>
+          <div class="partner">NSRCEL IIM Bangalore</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ CTA ============ -->
+    <section class="cta" aria-labelledby="cta-heading">
+      <div class="cta-bg"></div>
+      <div class="cta-orb cta-orb-1"></div>
+      <div class="cta-orb cta-orb-2"></div>
+      <div class="container cta-content reveal">
+        <h2 id="cta-heading">Start Your Inclusive Learning Journey Today</h2>
+        <p>Join thousands of learners building skills through accessible, inclusive education.</p>
+        <div class="actions">
+          <button class="btn btn-lg btn-light">Sign Up
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+          </button>
+          <button class="btn btn-lg btn-ghost-light">Explore Courses</button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- ============ Footer ============ -->
+  <footer class="site" id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <span class="logo">Prishni</span>
+          <p>Inclusive education and skill development for learners of all abilities.</p>
+          <div class="socials">
+            <a href="#" aria-label="Twitter"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M22 5.8a8.5 8.5 0 0 1-2.4.7 4.2 4.2 0 0 0 1.8-2.3 8.4 8.4 0 0 1-2.6 1A4.2 4.2 0 0 0 11.6 9 12 12 0 0 1 3 4.2a4.2 4.2 0 0 0 1.3 5.6 4.2 4.2 0 0 1-1.9-.5v.1a4.2 4.2 0 0 0 3.4 4.1 4.2 4.2 0 0 1-1.9.1 4.2 4.2 0 0 0 3.9 2.9A8.5 8.5 0 0 1 2 18.3a12 12 0 0 0 6.5 1.9c7.8 0 12-6.5 12-12v-.6A8.6 8.6 0 0 0 22 5.8z"/></svg></a>
+            <a href="#" aria-label="LinkedIn"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M19 3H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V5a2 2 0 0 0-2-2zM8.3 18.3H5.7V9.7h2.6v8.6zM7 8.6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zm11.3 9.7h-2.6v-4.2c0-1 0-2.3-1.4-2.3s-1.6 1.1-1.6 2.2v4.3H10V9.7h2.5v1.2a2.7 2.7 0 0 1 2.5-1.4c2.6 0 3.1 1.7 3.1 4v4.8z"/></svg></a>
+            <a href="#" aria-label="GitHub"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 2a10 10 0 0 0-3.2 19.5c.5.1.7-.2.7-.5v-1.7c-2.8.6-3.4-1.4-3.4-1.4-.5-1.2-1.1-1.5-1.1-1.5-.9-.6.1-.6.1-.6 1 .1 1.5 1 1.5 1 .9 1.5 2.4 1.1 3 .8.1-.7.4-1.1.6-1.4-2.2-.3-4.6-1.1-4.6-5 0-1.1.4-2 1-2.7-.1-.3-.4-1.3.1-2.7 0 0 .8-.3 2.7 1a9.4 9.4 0 0 1 5 0c1.9-1.3 2.7-1 2.7-1 .5 1.4.2 2.4.1 2.7.6.7 1 1.6 1 2.7 0 3.9-2.4 4.7-4.6 5 .4.3.7 1 .7 1.9v2.8c0 .3.2.6.7.5A10 10 0 0 0 12 2z"/></svg></a>
+          </div>
+        </div>
+        <div>
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="#">Home</a></li>
+            <li><a href="#">About Us</a></li>
+            <li><a href="#">Courses</a></li>
+            <li><a href="#">Careers</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Legal</h3>
+          <ul>
+            <li><a href="#">Privacy Policy</a></li>
+            <li><a href="#">Terms of Service</a></li>
+            <li><a href="#">Contact</a></li>
+          </ul>
+        </div>
+        <div>
+          <h3>Contact Us</h3>
+          <ul>
+            <li><a href="mailto:hello@prishni.com" class="contact-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg> hello@prishni.com</a></li>
+            <li><a href="tel:+911234567890" class="contact-link"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg> +91 123 456 7890</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="copyright">© <span id="year"></span> Prishni. All rights reserved.</div>
+    </div>
+  </footer>
+
+  <!-- ============ JS ============ -->
+  <script>
+    // ===== Inline SVG icons (no external libs) =====
+    const ICONS = {
+      eye: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>',
+      award: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="6"/><path d="M15.5 13.5L17 22l-5-3-5 3 1.5-8.5"/></svg>',
+      clock: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>',
+      book: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+      grad: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M22 10v6M2 10l10-5 10 5-10 5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>',
+      bulb: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18h6M10 22h4M12 2a7 7 0 0 0-4 12.7c.6.5 1 1.3 1 2.1V18h6v-1.2c0-.8.4-1.6 1-2.1A7 7 0 0 0 12 2z"/></svg>',
+      building: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M6 22V4a2 2 0 0 1 2-2h8a2 2 0 0 1 2 2v18Z"/><path d="M6 12H4a2 2 0 0 0-2 2v8h4"/><path d="M18 9h2a2 2 0 0 1 2 2v11h-4"/><path d="M10 6h4M10 10h4M10 14h4M10 18h4"/></svg>',
+      monitor: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg>',
+      keyboard: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="M6 8h.01M10 8h.01M14 8h.01M18 8h.01M6 12h.01M10 12h.01M14 12h.01M18 12h.01M7 16h10"/></svg>',
+      access: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="4" r="2"/><path d="M19 13v-2a7 7 0 0 0-14 0v2"/><path d="M12 8v9l4 5M12 17l-4 5"/></svg>',
+      heart: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/></svg>',
+      arrow: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" width="16" height="16"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>',
+      star: '<svg viewBox="0 0 24 24" fill="currentColor"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
+    };
+
+    // ===== Data =====
+    const features = [
+      { icon: 'eye', title: 'Accessible Learning', desc: 'Courses designed with accessibility in mind, ensuring every learner can engage fully.', color: 'primary' },
+      { icon: 'award', title: 'Expert-Designed Content', desc: 'Courses and materials created by experienced educators and specialists.', color: 'secondary' },
+      { icon: 'clock', title: 'Flexible Learning', desc: 'Learn anytime and anywhere with self-paced courses that fit your schedule.', color: 'accent' },
+      { icon: 'book', title: 'Educational Resources', desc: 'Access books, tools, and learning materials that support inclusive education.', color: 'primary' },
+    ];
+    const personas = [
+      { icon: 'grad', title: 'Learners', desc: 'Gain skills and knowledge through accessible and inclusive courses designed for diverse needs.', color: 'primary' },
+      { icon: 'bulb', title: 'Experts', desc: 'Create and publish courses to share your knowledge with a wider, more diverse audience.', color: 'secondary' },
+      { icon: 'building', title: 'Organizations', desc: 'Deliver accessible learning programs and training to your teams and communities.', color: 'accent' },
+    ];
+    const courses = [
+      { title: 'Web Accessibility Development', desc: 'Learn to build websites and applications accessible to all users, following WCAG guidelines.', diff: 'Intermediate', dur: '8 weeks' },
+      { title: 'Digital Skills for All', desc: 'Essential digital literacy skills designed for learners of diverse abilities.', diff: 'Beginner', dur: '6 weeks' },
+      { title: 'Assistive Technology Fundamentals', desc: 'Master the tools and technologies that enable independent learning and work.', diff: 'Beginner', dur: '4 weeks' },
+    ];
+    const a11y = [
+      { icon: 'monitor', title: 'Screen Reader Friendly', desc: 'Full compatibility with popular screen readers for seamless navigation.', color: 'primary' },
+      { icon: 'keyboard', title: 'Keyboard Navigation', desc: 'Complete keyboard support with visible focus indicators throughout.', color: 'secondary' },
+      { icon: 'access', title: 'Accessible Content', desc: 'All course content meets WCAG AA standards with captions and alt text.', color: 'accent' },
+      { icon: 'heart', title: 'Inclusive Design', desc: 'Built from the ground up with diverse learners and their needs in mind.', color: 'primary' },
+    ];
+    const testimonials = [
+      { quote: "Prishni's courses gave me the confidence and skills to pursue a career in web development. The accessible format made all the difference.", name: 'Ananya R.', role: 'Learner, Visual Impairment' },
+      { quote: "As an educator, I love how easy it is to create inclusive content on Prishni. The platform truly puts accessibility first.", name: 'Dr. Sanjay M.', role: 'Expert & Educator' },
+      { quote: "We've used Prishni to train our entire team on digital accessibility. The results have been outstanding.", name: 'Priya K.', role: 'HR Lead, Tech Company' },
+    ];
+
+    // ===== Render =====
+    document.getElementById('featuresGrid').innerHTML = features.map(f => `
+      <div class="card feature-card reveal">
+        <div class="icon-box icon-box-${f.color}">${ICONS[f.icon]}</div>
+        <h3>${f.title}</h3>
+        <p>${f.desc}</p>
+      </div>`).join('');
+
+    document.getElementById('whoGrid').innerHTML = personas.map(p => `
+      <div class="card who-card reveal">
+        <div class="icon-box icon-box-lg icon-box-${p.color}">${ICONS[p.icon]}</div>
+        <h3>${p.title}</h3>
+        <p>${p.desc}</p>
+      </div>`).join('');
+
+    document.getElementById('coursesGrid').innerHTML = courses.map(c => `
+      <article class="card course-card reveal">
+        <div class="pills">
+          <span class="pill pill-green">${c.diff}</span>
+          <span class="pill pill-blue">${c.dur}</span>
+        </div>
+        <h3>${c.title}</h3>
+        <p>${c.desc}</p>
+        <button class="btn btn-md btn-outline btn-block">View Course ${ICONS.arrow}</button>
+      </article>`).join('');
+
+    document.getElementById('a11yGrid').innerHTML = a11y.map(item => `
+      <div class="card a11y-card reveal">
+        <div class="icon-box icon-box-md icon-box-${item.color}">${ICONS[item.icon]}</div>
+        <h3>${item.title}</h3>
+        <p>${item.desc}</p>
+      </div>`).join('');
+
+    document.getElementById('testimonialsGrid').innerHTML = testimonials.map(t => `
+      <blockquote class="card t-card reveal">
+        <div class="stars">${ICONS.star.repeat(5)}</div>
+        <p class="q">"${t.quote}"</p>
+        <footer>
+          <cite>
+            <div class="t-avatar">${t.name.charAt(0)}</div>
+            <div>
+              <span class="t-name">${t.name}</span>
+              <span class="t-role">${t.role}</span>
+            </div>
+          </cite>
+        </footer>
+      </blockquote>`).join('');
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    // ===== Mobile menu =====
+    const menuBtn = document.getElementById('menuBtn');
+    const mobileMenu = document.getElementById('mobileMenu');
+    const ICON_MENU = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>';
+    const ICON_X = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>';
+    menuBtn.addEventListener('click', () => {
+      const open = mobileMenu.classList.toggle('open');
+      menuBtn.setAttribute('aria-expanded', open);
+      menuBtn.innerHTML = open ? ICON_X : ICON_MENU;
+    });
+    mobileMenu.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      menuBtn.innerHTML = ICON_MENU;
+    }));
+
+    // ===== Reveal on scroll =====
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); io.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal').forEach(el => io.observe(el));
+  </script>
+</body>
+</html>
